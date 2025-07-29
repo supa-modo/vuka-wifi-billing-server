@@ -9,7 +9,7 @@ export const sequelize = new Sequelize({
   username: config.db.user,
   password: config.db.password,
   dialect: "postgres",
-  logging: config.env === "development" ? console.log : false,
+  logging: config.env === "production" ? console.log : false,
   ssl: config.db.ssl,
   pool: {
     max: 10,

@@ -8,20 +8,20 @@ import UserSession from "./UserSession";
 import Payment from "./Payment";
 
 // Set up model associations
-User.hasMany(UserSession, { foreignKey: 'userId', as: 'sessions' });
-UserSession.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+User.hasMany(UserSession, { foreignKey: "userId", as: "sessions" });
+UserSession.belongsTo(User, { foreignKey: "userId", as: "user" });
 
-Plan.hasMany(UserSession, { foreignKey: 'planId', as: 'sessions' });
-UserSession.belongsTo(Plan, { foreignKey: 'planId', as: 'plan' });
+Plan.hasMany(UserSession, { foreignKey: "planId", as: "sessions" });
+UserSession.belongsTo(Plan, { foreignKey: "planId", as: "plan" });
 
-User.hasMany(Payment, { foreignKey: 'userId', as: 'payments' });
-Payment.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+User.hasMany(Payment, { foreignKey: "userId", as: "payments" });
+Payment.belongsTo(User, { foreignKey: "userId", as: "user" });
 
-Plan.hasMany(Payment, { foreignKey: 'planId', as: 'payments' });
-Payment.belongsTo(Plan, { foreignKey: 'planId', as: 'plan' });
+Plan.hasMany(Payment, { foreignKey: "planId", as: "payments" });
+Payment.belongsTo(Plan, { foreignKey: "planId", as: "plan" });
 
-UserSession.hasOne(Payment, { foreignKey: 'sessionId', as: 'payment' });
-Payment.belongsTo(UserSession, { foreignKey: 'sessionId', as: 'session' });
+UserSession.hasOne(Payment, { foreignKey: "sessionId", as: "payment" });
+Payment.belongsTo(UserSession, { foreignKey: "sessionId", as: "session" });
 
 // Export all models
 export { Admin } from "./Admin";
@@ -63,68 +63,69 @@ export const initializeDatabase = async (): Promise<void> => {
     if (!planExists) {
       await Plan.bulkCreate([
         {
-          name: "1 Hour",
+          name: "2 Hours",
           description: "Perfect for quick browsing and social media",
           basePrice: 10,
-          durationHours: 1,
+          durationHours: 2,
+          bandwidthLimit: "3M/1M",
           maxDevices: 3,
           isActive: true,
           isPopular: false,
           features: [
-            "High-speed internet",
+            "3 Mbps internet speed",
             "Up to 3 devices",
             "Social media access",
-            "Email & browsing + more"
+            "Email & browsing + more",
+          ],
+        },
+        {
+          name: "3 Hours",
+          description: "Great for extended browsing sessions",
+          basePrice: 20,
+          durationHours: 3,
+          bandwidthLimit: "3M/1M",
+          maxDevices: 3,
+          isActive: true,
+          isPopular: false,
+          features: [
+            "3 Mbps internet speed",
+            "Up to 3 devices",
+            "Streaming & downloads",
+            "Video calls + more",
           ],
         },
         {
           name: "1 Day",
-          description: "Great for a full day of work or entertainment",
-          basePrice: 50,
+          description: "Full day of high-speed internet access",
+          basePrice: 35,
           durationHours: 24,
+          bandwidthLimit: "5M/2M",
           maxDevices: 5,
           isActive: true,
           isPopular: true,
           features: [
-            "High-speed internet",
+            "5 Mbps internet speed",
             "Up to 5 devices",
-            "Streaming & downloads",
-            "Video calls",
-            "24/7 support + more"
+            "HD video streaming",
+            "24/7 support + more",
           ],
         },
         {
           name: "1 Week",
-          description: "Ideal for extended stays and remote work",
-          basePrice: 200,
+          description: "Best value for extended stays and remote work",
+          basePrice: 300,
           durationHours: 168, // 7 days
+          bandwidthLimit: "10M/5M",
           maxDevices: 5,
           isActive: true,
           isPopular: false,
           features: [
-            "High-speed internet",
+            "10+ Mbps internet speed",
             "Up to 5 devices",
             "Unlimited browsing",
-            "Priority support",
-            "File sharing + more"
+            "Priority support + more",
           ],
         },
-        {
-          name: "1 Month",
-          description: "Best value for long-term internet access",
-          basePrice: 500,
-          durationHours: 720, // 30 days
-          maxDevices: 8,
-          isActive: true,
-          isPopular: false,
-          features: [
-            "Ultra high-speed internet",
-            "Up to 8 devices",
-            "Premium support",
-            "Cloud backup access",
-            "Business tools + more"
-          ],
-        }
       ]);
       console.log("✅ Default payment plans created");
     }
@@ -139,7 +140,10 @@ export const initializeDatabase = async (): Promise<void> => {
 export type { AdminAttributes, AdminCreationAttributes } from "./Admin";
 export type { PlanAttributes, PlanCreationAttributes } from "./Plan";
 export type { UserAttributes, UserCreationAttributes } from "./User";
-export type { UserSessionAttributes, UserSessionCreationAttributes } from "./UserSession";
+export type {
+  UserSessionAttributes,
+  UserSessionCreationAttributes,
+} from "./UserSession";
 export type { PaymentAttributes, PaymentCreationAttributes } from "./Payment";
 
 export default {
