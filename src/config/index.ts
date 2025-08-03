@@ -102,6 +102,7 @@ export const config = {
       "http://localhost:3000",
       "http://localhost:5173",
       "https://vuka-wifi.vercel.app/",
+      "https://vukawifi.online",
     ],
     maxDevicesPerPlan: parseInt(process.env.MAX_DEVICES_PER_PLAN || "5", 10),
   },
