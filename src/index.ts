@@ -21,12 +21,39 @@ app.use(
 // CORS configuration
 app.use(
   cors({
-    origin: config.app.corsOrigins,
+    origin: true, // Allow all origins temporarily
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
   })
 );
+
+// CORS debugging middleware
+app.use((req, res, next) => {
+  console.log(`[CORS Debug] ${req.method} ${req.path}`);
+  console.log(`[CORS Debug] Origin: ${req.headers.origin}`);
+  console.log(`[CORS Debug] User-Agent: ${req.headers["user-agent"]}`);
+
+  // Add CORS headers manually for debugging
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, x-api-key"
+  );
+
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+
+  next();
+});
 
 // Rate limiting
 const limiter = rateLimit({
@@ -68,6 +95,15 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
     environment: config.env,
     version: "1.0.0",
+  });
+});
+
+// CORS test endpoint
+app.get("/cors-test", (req, res) => {
+  res.status(200).json({
+    message: "CORS is working!",
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString(),
   });
 });
 
