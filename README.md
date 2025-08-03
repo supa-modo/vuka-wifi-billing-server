@@ -358,7 +358,7 @@ npm start
 # Install PM2 globally
 npm install -g pm2
 
-# Start with PM2
+# Start with PM2 
 pm2 start dist/index.js --name "vuka-wifi-api"
 
 # Enable startup script

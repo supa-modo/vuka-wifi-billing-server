@@ -10,9 +10,7 @@ router.use("/auth", authRoutes);
 router.use("/plans", planRoutes);
 router.use("/radius", radiusRoutes);
 
-// API Routes
 
-// Health check for API
 router.get("/health", (req, res) => {
   res.json({
     status: "healthy",
