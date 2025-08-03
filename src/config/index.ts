@@ -97,12 +97,14 @@ export const config = {
   // Application configuration
   app: {
     name: process.env.APP_NAME || "VukaWiFi",
-    url: process.env.APP_URL || "https://vukawifi.com" || "https://vuka-wifi.vercel.app/",
+    url: process.env.APP_URL || "https://vukawifi.online",
     corsOrigins: process.env.CORS_ORIGINS?.split(",") || [
       "http://localhost:3000",
       "http://localhost:5173",
-      "https://vuka-wifi.vercel.app/",
+      "https://vuka-wifi.vercel.app",
       "https://vukawifi.online",
+      "https://www.vukawifi.online",
+      "https://api.vukawifi.online",
     ],
     maxDevicesPerPlan: parseInt(process.env.MAX_DEVICES_PER_PLAN || "5", 10),
   },
