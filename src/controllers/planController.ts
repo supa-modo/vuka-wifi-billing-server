@@ -41,7 +41,7 @@ export async function getPlans(req: Request, res: Response) {
 export async function getPlan(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    const plan = await Plan.findById(id);
+    const plan = await Plan.findByPk(id);
 
     if (!plan) {
       return res.status(404).json({
@@ -80,7 +80,7 @@ export async function calculatePlanPrice(req: Request, res: Response) {
       });
     }
 
-    const plan = await Plan.findById(id);
+    const plan = await Plan.findByPk(id);
     if (!plan) {
       return res.status(404).json({
         success: false,
@@ -175,7 +175,9 @@ export async function updatePlan(req: Request, res: Response) {
     const { id } = req.params;
     const updateData = req.body;
 
-    const plan = await Plan.findById(id);
+    console.log("Updating plan:", id, "with data:", updateData);
+
+    const plan = await Plan.findByPk(id);
     if (!plan) {
       return res.status(404).json({
         success: false,
@@ -184,7 +186,11 @@ export async function updatePlan(req: Request, res: Response) {
       });
     }
 
+    // Update the plan with the new data
     await plan.update(updateData);
+
+    // Reload the plan to get the updated data
+    await plan.reload();
 
     res.json({
       success: true,
@@ -206,7 +212,7 @@ export async function deletePlan(req: Request, res: Response) {
   try {
     const { id } = req.params;
 
-    const plan = await Plan.findById(id);
+    const plan = await Plan.findByPk(id);
     if (!plan) {
       return res.status(404).json({
         success: false,
@@ -236,7 +242,7 @@ export async function togglePlanStatus(req: Request, res: Response) {
   try {
     const { id } = req.params;
 
-    const plan = await Plan.findById(id);
+    const plan = await Plan.findByPk(id);
     if (!plan) {
       return res.status(404).json({
         success: false,
@@ -271,7 +277,7 @@ export async function setPlanPopular(req: Request, res: Response) {
     const { id } = req.params;
     const { isPopular } = req.body;
 
-    const plan = await Plan.findById(id);
+    const plan = await Plan.findByPk(id);
     if (!plan) {
       return res.status(404).json({
         success: false,

@@ -54,7 +54,7 @@ export const config = {
   // Admin configuration
   admin: {
     email: process.env.ADMIN_EMAIL || "admin@vukawifi.com",
-    password: process.env.ADMIN_PASSWORD || "admin123",
+    password: process.env.ADMIN_PASSWORD || "admin1234",
     firstName: process.env.ADMIN_FIRST_NAME || "System",
     lastName: process.env.ADMIN_LAST_NAME || "Administrator",
   },

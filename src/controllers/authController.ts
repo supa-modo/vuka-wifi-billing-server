@@ -23,41 +23,54 @@ export async function login(req: Request, res: Response) {
   const { email, password, twoFactorCode } = req.body;
   const admin = await Admin.findByEmail(email);
   if (!admin || !(await admin.validatePassword(password))) {
-    return res.status(401).json({ error: "Invalid email or password" });
+    return res.status(401).json({
+      success: false,
+      error: "Invalid email or password",
+    });
   }
   if (!admin.isActive) {
-    return res.status(403).json({ error: "Admin account is inactive" });
+    return res.status(403).json({
+      success: false,
+      error: "Admin account is inactive",
+    });
   }
   // If 2FA is enabled, require code
   if (admin.twoFactorEnabled) {
     if (!twoFactorCode) {
       return res.status(200).json({
+        success: false,
         requires2FA: true,
         message: "Two-factor authentication code required",
       });
     }
     if (!admin.twoFactorSecret || typeof admin.twoFactorSecret !== "string") {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Two-factor authentication is not properly set up for this account.",
-        });
+      return res.status(400).json({
+        success: false,
+        error:
+          "Two-factor authentication is not properly set up for this account.",
+      });
     }
     const valid2FA = twoFactorService.verifyToken(
       admin.twoFactorSecret,
       twoFactorCode
     );
     if (!valid2FA) {
-      return res
-        .status(401)
-        .json({ error: "Invalid two-factor authentication code" });
+      return res.status(401).json({
+        success: false,
+        error: "Invalid two-factor authentication code",
+      });
     }
   }
   admin.lastLogin = new Date();
   await admin.save();
   const token = signToken(admin);
-  res.json({ token, admin: admin.toJSON() });
+  res.json({
+    success: true,
+    data: {
+      token,
+      admin: admin.toJSON(),
+    },
+  });
 }
 
 export async function setup2FA(req: Request, res: Response) {

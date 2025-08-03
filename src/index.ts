@@ -71,7 +71,6 @@ app.get("/health", (req, res) => {
   });
 });
 
-// API routes will be added here
 app.get("/api", (req, res) => {
   res.json({
     message: "VukaWiFi Billing System API",

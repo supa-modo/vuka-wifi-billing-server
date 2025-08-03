@@ -1,15 +1,11 @@
 import { Router } from "express";
 
-import * as authController from "../controllers/authController";
 import authRoutes from "./auth";
 import planRoutes from "./plans";
 import radiusRoutes from "./radius";
 
 const router = Router();
-const authRouter = Router();
-authRouter.post("/login", authController.login);
-authRouter.post("/reset-request", authController.resetRequest);
-authRouter.post("/reset-confirm", authController.resetConfirm);
+
 router.use("/auth", authRoutes);
 router.use("/plans", planRoutes);
 router.use("/radius", radiusRoutes);
