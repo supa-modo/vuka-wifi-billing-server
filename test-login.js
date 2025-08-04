@@ -5,7 +5,7 @@ async function testLogin() {
     const response = await axios.post(
       "http://localhost:5000/api/v1/auth/login",
       {
-        email: "admin@vukawifi.com",
+        email: "admin@vukawifi.online",
         password: "admin1234",
       }
     );

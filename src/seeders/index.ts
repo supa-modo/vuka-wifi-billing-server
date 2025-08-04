@@ -38,14 +38,14 @@ async function seedAdminUsers(): Promise<void> {
       role: "super_admin" as const,
     },
     {
-      email: "manager@vukawifi.com",
+      email: "manager@vukawifi.online",
       password: "manager123",
       firstName: "WiFi",
       lastName: "Manager",
       role: "admin" as const,
     },
     {
-      email: "support@vukawifi.com",
+      email: "support@vukawifi.online",
       password: "support123",
       firstName: "Customer",
       lastName: "Support",

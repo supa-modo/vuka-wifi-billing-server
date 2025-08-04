@@ -84,7 +84,7 @@ JWT_EXPIRES_IN=24h
 JWT_REFRESH_EXPIRES_IN=7d
 
 # Admin Configuration
-ADMIN_EMAIL=admin@vukawifi.com
+ADMIN_EMAIL=admin@vukawifi.online
 ADMIN_PASSWORD=admin123
 ADMIN_FIRST_NAME=System
 ADMIN_LAST_NAME=Administrator
@@ -125,7 +125,7 @@ The server will start on `http://localhost:5000` with the following output:
    • API Info: http://localhost:5000/api
 
 🔐 Default Admin Credentials:
-   • Email: admin@vukawifi.com
+   • Email: admin@vukawifi.online
    • Password: admin123
 
 ⚡ Ready to accept requests!
@@ -358,7 +358,7 @@ npm start
 # Install PM2 globally
 npm install -g pm2
 
-# Start with PM2 
+# Start with PM2
 pm2 start dist/index.js --name "vuka-wifi-api"
 
 # Enable startup script
@@ -409,10 +409,10 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For support and questions:
 
-- **Email**: support@vukawifi.com
+- **Email**: support@vukawifi.online
 - **Phone**: +254 790 193402
 - **Documentation**: `/api/v1/docs`
 
 ---
 
-**Built with ❤️ for the Kenyan WiFi hotspot market**
+---

@@ -46,10 +46,10 @@ export const syncDatabase = async (force: boolean = false): Promise<void> => {
 export const initializeDatabase = async (): Promise<void> => {
   try {
     // Create default admin user if it doesn't exist
-    const adminExists = await Admin.findByEmail("admin@vukawifi.com");
+    const adminExists = await Admin.findByEmail("admin@vukawifi.online");
     if (!adminExists) {
       await Admin.create({
-        email: "admin@vukawifi.com",
+        email: "admin@vukawifi.online",
         password: "admin123",
         firstName: "System",
         lastName: "Administrator",

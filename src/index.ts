@@ -233,7 +233,7 @@ const startServer = async (): Promise<void> => {
    • API Info: http://localhost:${config.port}/api
 
 🔐 Default Admin Credentials:
-   • Email: admin@vukawifi.com
+   • Email: admin@vukawifi.online
    • Password: admin123
 
 ⚡ Ready to accept requests!
