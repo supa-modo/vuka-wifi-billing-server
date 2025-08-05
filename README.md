@@ -265,7 +265,7 @@ payment_plans (
   id UUID PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   description TEXT,
-  duration_hours INTEGER NOT NULL,
+  durationHours INTEGER NOT NULL,
   price DECIMAL(10,2) NOT NULL,
   currency VARCHAR(3) DEFAULT 'KES',
   data_limit_mb BIGINT,
