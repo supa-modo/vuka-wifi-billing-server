@@ -275,6 +275,8 @@ Payment.init(
   }
 );
 
+// Associations are defined in models/index.ts
+
 export default Payment;
 export { Payment };
 export type { PaymentAttributes, PaymentCreationAttributes };

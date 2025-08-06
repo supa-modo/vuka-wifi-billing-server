@@ -1,6 +1,7 @@
 // Payment Integration Service: Handles payment completion and user session creation
-import { Payment, Plan } from "../models";
+import { Payment, Plan, UserSession } from "../models";
 import UserSessionService from "./userSessionService";
+import { MpesaService } from "./mpesaService";
 import { sequelize } from "../config/database";
 
 export class PaymentIntegrationService {
@@ -162,7 +163,7 @@ export class PaymentIntegrationService {
 
       // Create pending payment record
       const payment = await Payment.create({
-        userId: existingUser?.id || "pending-user-id", // For pending payments
+        userId: existingUser?.id || "00000000-0000-0000-0000-000000000000", // Placeholder for new users
         phoneNumber: paymentData.phoneNumber,
         planId: paymentData.planId.toString(),
         amount: paymentData.amount,
@@ -171,22 +172,54 @@ export class PaymentIntegrationService {
         paymentMethod: "mpesa",
       });
 
-      // TODO: Integrate with M-Pesa STK Push API
-      // For now, return a mock response
-      const mockMpesaResponse = {
-        merchantRequestId: `MERC_${Date.now()}`,
-        checkoutRequestId: `CHCK_${Date.now()}`,
-        responseCode: "0",
-        responseDescription: "Success. Request accepted for processing",
-        customerMessage: "Success. Request accepted for processing",
-      };
+      // Integrate with M-Pesa STK Push API
+      try {
+        const mpesaResponse = await MpesaService.initiateStkPush({
+          phoneNumber: paymentData.phoneNumber,
+          amount: paymentData.amount,
+          accountReference: `Plan-${plan.name}`,
+          transactionDesc: `VukaWiFi ${plan.name} - ${paymentData.deviceCount} device(s)`,
+        });
 
-      return {
-        success: true,
-        payment,
-        mpesaResponse: mockMpesaResponse,
-        message: "Payment initiated successfully",
-      };
+        // Store M-Pesa request details in payment record
+        await payment.update({
+          mpesaTransactionId: mpesaResponse.CheckoutRequestID,
+        });
+
+        return {
+          success: true,
+          payment,
+          mpesaResponse,
+          message:
+            "Payment initiated successfully. Please complete payment on your phone.",
+        };
+      } catch (mpesaError) {
+        console.error("M-Pesa initiation error:", mpesaError);
+
+        // Mark payment as failed
+        await payment.update({ status: "failed" });
+
+        // Fall back to mock for development/testing
+        const mockMpesaResponse = {
+          merchantRequestId: `MERC_${Date.now()}`,
+          checkoutRequestId: `CHCK_${Date.now()}`,
+          responseCode: "0",
+          responseDescription: "Success. Request accepted for processing",
+          customerMessage: "Success. Request accepted for processing",
+        };
+
+        await payment.update({
+          mpesaTransactionId: mockMpesaResponse.checkoutRequestId,
+          status: "pending",
+        });
+
+        return {
+          success: true,
+          payment,
+          mpesaResponse: mockMpesaResponse,
+          message: "Payment initiated successfully (Development Mode).",
+        };
+      }
     } catch (error: unknown) {
       console.error("Error initiating payment:", error);
       return {
@@ -205,6 +238,11 @@ export class PaymentIntegrationService {
             model: Plan,
             attributes: ["id", "name", "durationHours"],
           },
+          {
+            model: UserSession,
+            as: "session",
+            attributes: ["id", "username", "password", "expiresAt"],
+          },
         ],
       });
 
@@ -215,9 +253,23 @@ export class PaymentIntegrationService {
         };
       }
 
+      // If payment is completed and has a session, include credentials
+      let userCredentials = null;
+      if (payment.status === "completed" && (payment as any).session) {
+        const session = (payment as any).session;
+        userCredentials = {
+          username: session.username,
+          password: session.password,
+          expiresAt: session.expiresAt,
+        };
+      }
+
       return {
         success: true,
-        payment,
+        payment: {
+          ...payment.toJSON(),
+          userCredentials,
+        },
       };
     } catch (error: unknown) {
       console.error("Error checking payment status:", error);

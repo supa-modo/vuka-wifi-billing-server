@@ -3,13 +3,14 @@ import { Router } from "express";
 import authRoutes from "./auth";
 import planRoutes from "./plans";
 import radiusRoutes from "./radius";
+import paymentRoutes from "./payments";
 
 const router = Router();
 
 router.use("/auth", authRoutes);
 router.use("/plans", planRoutes);
 router.use("/radius", radiusRoutes);
-
+router.use("/payments", paymentRoutes);
 
 router.get("/health", (req, res) => {
   res.json({

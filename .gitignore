@@ -14,7 +14,7 @@ yarn-debug.log
 .env.production.local
 
 # Build output
-# dist/
+dist/
 build/
 
 # Uploads
